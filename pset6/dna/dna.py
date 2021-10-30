@@ -1,4 +1,6 @@
-import re
+from sys import argv
+import csv
+
 
 def main():
     countSTR('AA', './sequences/1.txt')
@@ -10,7 +12,7 @@ def countSTR(STR, sequence):
 
     with open(sequence, "r") as seq:
         seq = seq.read()
-        seq = 'AABBAAAABBCCAAAAAAAAAAAABBDDFAAGGAAAAAAAA'
+        seq = 'AABBCCAAAAAA'
         seq_len = len(seq)
        
         i = 0 
@@ -29,6 +31,7 @@ def countSTR(STR, sequence):
                     str_count_arr.append(str_count)
                 i += 1
                 str_count = 0
+        print(max(str_count_arr))
         return max(str_count_arr)               
    
 if __name__ == "__main__":
