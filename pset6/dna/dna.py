@@ -3,7 +3,17 @@ import csv
 
 
 def main():
+    
+    if len(argv) != 3:
+        print("Usage: python dna.py data.csv sequence.txt")
+        exit(1)
+
     countSTR('AA', './sequences/1.txt')
+
+
+
+
+
 
 def countSTR(STR, sequence):
     str_count = 0
