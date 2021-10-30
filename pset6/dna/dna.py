@@ -1,34 +1,35 @@
 import re
 
 def main():
-    countSTR('TA', './sequences/1.txt')
+    countSTR('AA', './sequences/1.txt')
 
 def countSTR(STR, sequence):
     str_count = 0
+    str_count_arr = []
     str_len = len(STR)
 
     with open(sequence, "r") as seq:
         seq = seq.read()
+        seq = 'AABBAAAABBCCAAAAAAAAAAAABBDDFAAGGAAAAAAAA'
         seq_len = len(seq)
-        
-        str_count = regexRecurse(seq, STR)
-        print(str_count)
+       
+        i = 0 
+        while i < seq_len:
+            current = seq[i:i+str_len]
+            print(current)
+            if current == STR:
+                print("MATCH!")
+                str_count += 1
+                i += str_len
 
-def regexRecurse(substring, STR):
-    count = 0
-    match = re.search(STR, substring)
-
-    if not match:
-        return count + 1
-    
-    end_idx = match.span()[1]
-    count += 1
-    if substring[end_idx:end_idx + len(STR)] == STR:
-        count += regexRecurse(substring[end_idx:], STR)
-        return count
-    else:
-        return regexRecurse(substring[end_idx:], STR)
-
-
+                if i == seq_len:
+                    str_count_arr.append(str_count)
+            else:
+                if str_count > 0:
+                    str_count_arr.append(str_count)
+                i += 1
+                str_count = 0
+        return max(str_count_arr)               
+   
 if __name__ == "__main__":
     main()
