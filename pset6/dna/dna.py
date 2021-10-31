@@ -14,7 +14,6 @@ def main():
         for i in range(len(df)):
 
             try:
-
                 if df.iloc[i][STR] != countSTR(STR, argv[2]):
                     # Check that there is only one max value
                     df = df[df.name != df.iloc[i]['name']]
@@ -51,7 +50,6 @@ def countSTR(STR, sequence):
                     str_count_arr.append(str_count)
                 i += 1
                 str_count = 0
-       
         if len(str_count_arr) == 0:
             return 0
         return max(str_count_arr)              
