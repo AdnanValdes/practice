@@ -25,7 +25,7 @@ Raymond: As thief left courhouse, made <1 min call about taking earlest flight o
 */
 
 -- Check security logs for vehicles that left within 10 min of theft (at hour 10, between minute 15 and 25)
-select license_plane, minute from courthouse_security_logs
+select license_plate, minute from courthouse_security_logs
 where year = 2020
 and month = 7
 and day = 28
@@ -62,6 +62,30 @@ limit 1;
 /*---------------------------  ----------------  --------*/
 /*Fiftyville Regional Airport  Heathrow Airport  8-20*/
 
-
-
+/* Check phone call records for calls less than a minute in duration that match a person with the above
+license plate */
+select distinct c.name as caller from people as c
+where c.phone_number in (
+	select caller from phone_calls
+	where year = 2020
+	and month = 7
+	and day = 28
+	and duration < 60 -- Durations are in seconds
+)
+and c.license_plate in (
+	select license_plate from courthouse_security_logs
+	where year = 2020
+	and month = 7
+	and day = 28
+	and hour = 10
+	and minute between 15 and 25
+);
+/* Result:
+caller
+-------
+Roger
+Russell
+Evelyn
+Ernest
+*/
 
