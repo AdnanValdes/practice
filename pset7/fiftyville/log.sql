@@ -89,3 +89,85 @@ Evelyn
 Ernest
 */
 
+-- Check if any of the above was using an atm the morning of the theft
+select name, atm_location, transaction_type, amount from atm_transactions
+join bank_accounts on atm_transactions.account_number = bank_accounts.account_number
+join people on bank_accounts.person_id = people.id
+where name in ( 
+	select distinct c.name as caller from people as c
+	where c.phone_number in (
+		select caller from phone_calls
+		where year = 2020
+		and month = 7
+		and day = 28
+		and duration < 60 -- Durations are in seconds
+	)
+	and c.license_plate in (
+		select license_plate from courthouse_security_logs
+		where year = 2020
+		and month = 7
+		and day = 28
+		and hour = 10
+		and minute between 15 and 25
+		)
+	)
+and atm_location = "Fifer Street"
+and year = 2020
+and month = 7
+and day = 28;
+/* Result
+Ernest - withdraw 50
+Russell - withdraw 35
+*/
+
+-- Check for passengers on 8:20 flight to Heathrow
+select name from people
+join passengers on passengers.passport_number = people.passport_number
+join flights on flights.id = passengers.flight_id
+join airports as o on o.id = flights.origin_airport_id
+join airports as d on d.id = flights.destination_airport_id
+where name in (
+	 
+select name from atm_transactions
+join bank_accounts on atm_transactions.account_number = bank_accounts.account_number
+join people on bank_accounts.person_id = people.id
+where name in ( 
+	select distinct c.name as caller from people as c
+	where c.phone_number in (
+		select caller from phone_calls
+		where year = 2020
+		and month = 7
+		and day = 28
+		and duration < 60 -- Durations are in seconds
+	)
+	and c.license_plate in (
+		select license_plate from courthouse_security_logs
+		where year = 2020
+		and month = 7
+		and day = 28
+		and hour = 10
+		and minute between 15 and 25
+		)
+	)
+and atm_location = "Fifer Street"
+and year = 2020
+and month = 7
+and day = 28
+)
+and flights.origin_airport_id = (
+	select id from airports
+	where city = "Fiftyville"
+)
+and  flights.destination_airport_id = (
+	select id from airports
+	where city = "London"
+)
+and flights.day = 29
+and flights.month = 7
+and flights.year = 2020
+and flights.hour = 8
+and flights.minute = 20;
+/* Result
+Ernest -- This is the thief
+*/
+
