@@ -171,3 +171,18 @@ and flights.minute = 20;
 Ernest -- This is the thief
 */
 
+-- Check people who recieved a call from Ernest less than 60 seconds in duration
+select name from people
+join phone_calls on phone_calls.receiver = people.phone_number
+where phone_calls.caller = (
+	select caller from phone_calls
+	join people on phone_calls.caller = people.phone_number
+	where name = "Ernest"
+)
+and year = 2020
+and month = 7
+and day = 28
+and duration < 60;
+/* Result
+Berthold -- this is the accomplice
+*/
