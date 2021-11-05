@@ -1,9 +1,10 @@
--- Keep a log of any SQL queries you execute as you solve the mystery.
--- Find:
--- 	Thief | City thief escaped to | Accomplice
--- Crime notes: happened on July 28, 2020 on Chamberlin street
+/* Keep a log of any SQL queries you execute as you solve the mystery.
+ Find:
+ 	Thief | City thief escaped to | Accomplice
+ Crime notes: happened on July 28, 2020 on Chamberlin street
 
--- Start by looking at crime reports on July 28, 2020 on Chamberlin st
+ Start by looking at crime reports on July 28, 2020 on Chamberlin st
+ */
 select * from crime_scene_reports 
 where year = 2020 
 and month = 7 
@@ -31,17 +32,18 @@ and month = 7
 and day = 28
 and hour = 10
 and minute between 15 and 25; -- For BETWEEN, start and end values are included
--- Possible license_plates
-/*license_plate  minute*/
-/*-------------  ------*/
-/*5P2BI95        16*/
-/*94KL13X        18*/
-/*6P58WS2        18*/
-/*4328GD8        19*/
-/*G412CB7        20*/
-/*L93JTIZ        21*/
-/*322W7JE        23*/
-/*0NTHK55        23*/
+/* Possible license_plates
+License_plate  minute
+-------------  ------
+5P2BI95        16
+94KL13X        18
+6P58WS2        18
+4328GD8        19
+G412CB7        20
+L93JTIZ        21
+322W7JE        23
+0NTHK55        23
+ */
 
 -- Find what is the earliest flight out of Fiftyville on July 29, 2020
 select o.full_name as origin, d.full_name as destination, hour || "-" || minute as dep_time from flights
@@ -57,13 +59,13 @@ and day = 29
 group by hour, minute
 order by hour, minute
 limit 1;
--- Result:
-/*origin                       destination       dep_time*/
-/*---------------------------  ----------------  --------*/
-/*Fiftyville Regional Airport  Heathrow Airport  8-20*/
+/*Result:
+origin                       destination       dep_time
+---------------------------  ----------------  --------
+Fiftyville Regional Airport  Heathrow Airport  8-20
+*/
 
-/* Check phone call records for calls less than a minute in duration that match a person with the above
-license plate */
+--Check phone call records for calls less than a minute in duration that match a person with the above license plate 
 select distinct c.name as caller from people as c
 where c.phone_number in (
 	select caller from phone_calls
