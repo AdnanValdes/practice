@@ -5,12 +5,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
         <link href="styles.css" rel="stylesheet">
         <title>Trivia!</title>
-
-        <script>
-
-            // TODO: Add code to check answers to questions
-
-        </script>
     </head>
     <body>
 
@@ -25,6 +19,12 @@
                 <hr>
 
                 <!-- TODO: Add multiple choice question here -->
+			<h3>Which major Greek hero was inside the Trojan Horse?<h3>
+			<button class="incorrect" type="button" id="Aeneas">Aeneas</button>	
+			<button class="incorrect" type="button" id="Achilles">Achilles</button>
+			<button class="correct" type="button" id="Odysseus">Odysseus</button>
+			<button class="incorrect" type="button" id="Agamemnon">Agamemnon</button>
+			<p id="iscorrect1"></p>
 
             </div>
 
@@ -33,9 +33,51 @@
                 <hr>
 
                 <!-- TODO: Add free response question here -->
+			<h3>Who was the prince of Troy, son of King Priam?</h3>
+			<input autocomplete="off" id="prince" placeholder="Enter your answer here" type="text">
+			<input type="submit" id="answer">
+			<p id="iscorrect2"></p>
 
             </div>
-
         </div>
+        <script>
+		
+        	// TODO: Add code to check answers to questions
+		window.addEventListener("load", function(){
+
+			// Deal with Part 1
+			let correct = document.querySelector(".correct")		 
+			let incorrect = document.querySelectorAll(".incorrect")
+
+			correct.addEventListener("click", function(){
+				correct.style.backgroundColor = "green";
+				document.querySelector("#iscorrect1").innerHTML = "Correct!";
+				incorrect.disabled = true;
+			})
+			
+			for (let i = 0; i < incorrect.length; i++) {
+				incorrect[i].addEventListener("click", function(){
+					incorrect[i].style.backgroundColor = "red";
+					document.querySelector("#iscorrect1").innerHTML = "Incorrect!";
+				})
+			}
+
+			// Deal with Part 2
+			document.querySelector("#answer").addEventListener("click", function(){
+
+				let iscorrect = document.querySelector("#iscorrect2")
+				let answer = document.querySelector("#prince")
+
+				if (answer.value.toLowerCase() == "hector"){
+					answer.style.backgroundColor = "green";
+					iscorrect.innerHTML = "Correct!";
+				}
+				else {
+					answer.style.backgroundColor = "red";
+					iscorrect.innerHTML = "Incorrect!"
+				}
+			})
+		})
+        </script>
     </body>
 </html>
