@@ -18,7 +18,7 @@
 	</head>
 	<body class="bg-secondary">
 			<!-- Navbar -->
-		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+		<nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3">
 			<div class="container">
 				<a href="#" class="navbar-brand">Terminus</a>
 				<span class="navbar-text">Respect and enjoy the peace</span>
@@ -47,19 +47,39 @@
 			</div>
 		</nav>
 		<!-- Showcase area  -->
-		<section class="bg-dark text-light p-5 text-center">
+		<section class="bg-dark text-light p-5 p-lg-0 pt-lg-5 text-center text-sm-start">
 			<div class="container">
-				<div class="d-sm-flex">
+				<div class="d-sm-flex align-items-center justify-content-between">
 					<div>
 						<h1>Welcome to the <span style="color: #f3b973">Terminus Library</span></h1>
-						<p class="lead">
+						<p class="lead my-5">
 							<em>...its location was an odd one for the role It was called upon to play in Galactic history, and yet as many writers have never tired of pointing out, an inevitable one. Located on the very fringe of the Galactic spiral, an only planet of an isolated sun, poor in resources and negligible in economic value, it was never settled In the five centuries after its discovery, until the landing of the Encyclopedists... (<a href="https://asimov.fandom.com/wiki/Foundation">Foundation</a>)</em><br>
 						</p>
 					</div>
-					<img class="img-fluid w-50" src="img/reading.svg" alt="Climbing books">
+					<img class="img-fluid w-50 d-none d-md-block" src="img/reading.svg" alt="Climbing books">
 				</div>
 			</div>
 		</section>
+
+		<!-- Search books sections-->
+		<section class="bg-light text-dark p-5">
+			<div class="container">
+				<div class="d-md-flex justify-content-between align-items-center">
+					<h3 class="mb-3 mb-md-0">Search the Library:</h3>
+
+					<div class="input-group lib-q">
+						<input type="text"
+								class="form-control"
+								placeholder="Library query">
+						<button class="btn btn-dark btn-lg"
+									type="button">
+						Button
+						</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
 		crossorigin="anonymous"></script>
