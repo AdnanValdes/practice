@@ -1,53 +1,76 @@
 <!doctype html>
 <html lang="en">
 	<head>
+		<! -- To auto reload every 10 seconds for development --!>
+		<meta http-equiv="refresh" content="10">
 	    <!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	
+
 		<!-- Bootstrap CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+		rel="stylesheet"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+		crossorigin="anonymous">
 		<!-- Custom CSS -->
 		<link href="styles.css" rel="stylesheet">
-		<title>Adnan Valdes</title>
+		<title>Terminus</title>
 	</head>
-	<body class="d-flex flex-column h-100">
-		<header>
+	<body class="bg-secondary">
+			<!-- Navbar -->
+		<nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3">
 			<div class="container">
-				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-					<div class="container-fluid" id="navbarContent">
-						<div class="navbar-nav">
-							<a class="nav-item nav-link active" href="index.html">Home</a>	
-							<a class="nav-item nav-link" href="blog.html">Blog</a>
-							<a class="nav-item nav-link" href="records.html">Records</a>
-							<a class="nav-item nav-link" href="about.html">About</a>
-							<a class="nav-item nav-link" href="contact.html">Contact</a>
-						</div>
-					</div>
-				</nav>
+				<a href="#" class="navbar-brand">Terminus</a>
+				<span class="navbar-text">Respect and enjoy the peace</span>
+				<button class="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#navbarMenu">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarMenu">
+					<ul class="navbar-nav ms-auto">
+						<li class="nav-item">
+							<a href="index.html" class="nav-link">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="blog.html" class="nav-link">Blog</a>
+						</li>
+						<li class="nav-item">
+							<a href="about.html" class="nav-link">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="contact.html" class="nav-link">Contact</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<header class="bg-dark text-light p-5 p-lg-0 pt-lg-5 text-sm-start">
+			<div class="container">
+				<h1 class="text-center pb-5"><span style="color: #f3b973">Seldon's</span> blog</h1>
 			</div>
 		</header>
-		<main>
+		<main class="text-light">
 			<div class="container">
-				<h1 class="text-center">Search for a book!</h1>
-					<div class="input-group">
-					    <input type="text" class="form-control" placeholder="Search....." /> 
-				        </div>
-				</div>				
+				<div class="container justify-content-between align-text-bottom">
+					<h2 class="text-start">Post 1 title</h2>
+					<p><em>Date: 01/11/15604, Time: 08:00</em></p>
+				</div>
+				<hr>
+				<div class="container justify-content-between align-text-bottom pb-5">
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt, perferendis! Amet ipsum similique accusamus error ab voluptas porro voluptatem temporibus quas nulla sequi commodi, quam incidunt atque modi reiciendis, repudiandae sapiente sint nostrum quaerat? Minima, fugiat? Harum animi aliquam quam. Molestias labore quae tempore esse consectetur vitae, nisi nemo magnam natus aliquid nam reiciendis nihil ipsam non minima. Cupiditate nemo voluptate velit omnis illum libero corrupti repudiandae perspiciatis aperiam voluptatibus, totam earum, impedit eos quae dolorum. Vitae quia facilis commodi minima, assumenda inventore. Beatae et commodi minus sapiente at. Sint atque cum fuga sapiente sit, veniam officiis saepe ut est!
+				</div>
+			</div>
+			<div class="container">
+				<div class="container justify-content-between align-text-bottom">
+					<h2 class="text-start">Post 2 title</h2>
+					<p><em>Date: 01/11/15604, Time: 10:00</em></p>
+				</div>
+				<hr>
+				<div class="container justify-content-between align-text-bottom pb-5">
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae inventore tempora mollitia praesentium, sed rem dolor dignissimos odio voluptatibus laborum officia dolore? Quae minus, nesciunt ullam pariatur alias amet atque accusantium perspiciatis accusamus, ipsum similique, consectetur error quas in saepe fugiat numquam iusto. Nostrum deserunt aperiam sunt nemo laboriosam recusandae quis rerum, ullam velit neque quisquam, expedita ratione nihil explicabo esse eveniet necessitatibus? Ipsam rem sit blanditiis eaque? Atque temporibus, quasi facere magnam possimus esse accusamus fugit, dicta totam dignissimos ut commodi cum quibusdam voluptatem reprehenderit! Rem voluptate dicta similique quasi, repellat eos aliquam illo est quod! Quo, ducimus rem!
 			</div>
 		</main>
-		<footer class="footer position-absolute bottom-0 start-50 py-3 bg-dark">
-			<div class="container" id="footerContent">
-				<span class="text-muted ">Copyright &#169; Adnan Valdes</span>
-			</div>
-		</footer>
-
-		
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-		<script>
-			
-		</script>
-
-
 	</body>
 </html>

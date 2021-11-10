@@ -3,3 +3,8 @@
         width: 60%;
     }
 }
+
+.result, #item, ul {
+    list-style-type: none;
+    list-style: none;
+}
