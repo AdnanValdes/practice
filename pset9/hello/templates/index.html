@@ -1,11 +1,12 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "layout.html" %}
+
+{% block body %}
+<!-- Note that the variable here has to be the same as the kwarg in Python -->
    hello, {{ name }}
-</body>
-</html>
+
+   <!-- Using a POST method to avoid having the information show on URI-->
+   <form action="/greet" method="post">
+       <input type="text" required autocomplete autofocus name="name" placeholder="Name">
+   </form>
+
+{% endblock %}
