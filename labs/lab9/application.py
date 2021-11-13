@@ -16,16 +16,20 @@ db = SQL("sqlite:///birthdays.db")
 def index():
     if request.method == "POST":
         # TODO: Add the user's entry into the database
-        name = request.form.get('name').capitalize()
-        birthday = request.form.get('birthday')
-        month = birthday[5:7]
-        day = birthday[-2:]
-        db.execute("insert into birthdays (name, month, day) values (:name, :month, :day)", name=name, month=month, day=day)
+        if "delete" in request.form:
+            print(request.form.get("delete"))
+            db.execute('delete from birthdays where name = ?', request.form.get('name'))
+
+        elif 'name' in request.form:
+            name = request.form.get('name').capitalize()
+            birthday = request.form.get('birthday')
+            month = birthday[5:7]
+            day = birthday[-2:]
+            db.execute("insert into birthdays (name, month, day) values (:name, :month, :day)", name=name, month=month, day=day)
         return redirect("/")
 
     else:
         rows = db.execute("select * from birthdays")
-        print(rows)
         # TODO: Display the entries in the database on index.html
 
         return render_template("index.html", rows=rows)

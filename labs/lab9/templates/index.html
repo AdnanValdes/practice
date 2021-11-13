@@ -16,8 +16,8 @@
                 <h2>Add a Birthday</h2>
                     <div class="section">
                         <form action="/" method="post" name="add">
-                            <input type="text" id="name" name="name" placeholder="Name">
-                            <input type="date" id=birthday name="birthday">
+                            <input type="text" name="name" placeholder="Name">
+                            <input type="date" name="birthday">
                             <input type="submit">
                         </form>
                     </div>
@@ -41,9 +41,11 @@
                             <td>{{ row['day']}} / {{ row['month']}} </td>
                             <td>
                                 <form action="/" method="post">
-                                    <input type="submit" action="/" method="post" value="Delete" row_id={{ row['id'] }}>
+                                    <input type="hidden" name="delete" value>
+                                    <input type="submit" value="Delete" name="{{ row.name }}">
                                 </form>
                             </td>
+
                         </tr>
                         {% endfor %}
                     </tbody>
