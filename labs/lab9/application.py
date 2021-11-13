@@ -17,8 +17,7 @@ def index():
     if request.method == "POST":
         # TODO: Add the user's entry into the database
         if "delete" in request.form:
-            print(request.form.get("delete"))
-            db.execute('delete from birthdays where name = ?', request.form.get('name'))
+            db.execute('delete from birthdays where id = ?', request.form.get('delete'))
 
         elif 'name' in request.form:
             name = request.form.get('name').capitalize()

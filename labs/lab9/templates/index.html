@@ -41,8 +41,8 @@
                             <td>{{ row['day']}} / {{ row['month']}} </td>
                             <td>
                                 <form action="/" method="post">
-                                    <input type="hidden" name="delete" value>
-                                    <input type="submit" value="Delete" name="{{ row.name }}">
+                                    <input type="hidden" name="delete" value="{{ row.id }}">
+                                    <input type="submit" value="delete">
                                 </form>
                             </td>
 
