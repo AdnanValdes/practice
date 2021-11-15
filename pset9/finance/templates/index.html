@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Home
+{% endblock %}
+
+{% block main %}
+	<table class="table table-striped text-light">
+		<thead class="thead-dark">
+			<tr>
+				<th class="text-start">Symbol</th>
+				<th class="text-start">Name</th>
+				<th class="text-end">Shares</th>
+				<th class="text-end">Price</th>
+				<th class="text-end">TOTAL</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for stock in portfolio %}
+				<tr>
+					<td class="text-start">{{ stock.symbol }}</td>
+					<td class="text-start">Gamestop Corporation - Class A</td>
+					<td class="text-end">{{ stock.shares }}</td>
+					<td class="text-end">$202.10</td>
+					<td class="text-end">$2,021.00</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

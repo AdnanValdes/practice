@@ -49,7 +49,9 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    data = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
+
+    return render_template("index.html", portfolio=data)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -88,6 +90,7 @@ def buy():
         )
 
         # Add to portfolio
+        # Needs to account for shares of the same stock
         db.execute("""
             insert into portfolio
                 (user_id, symbol, shares)
@@ -98,7 +101,6 @@ def buy():
             symbol=symbol['symbol'],
             shares=shares
         )
-
 
         return redirect("/")
 
