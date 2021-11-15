@@ -65,7 +65,7 @@ def usd(value):
 
 def enforce_tables(database):
     """Ensure all required tables are present in database"""
-    
+
     database.execute("""
     create table if not exists users (
         id integer,
@@ -106,5 +106,5 @@ def enforce_tables(database):
     """)
 
     database.execute("""
-        create index if not exists user_id on portfolio (user_id)
+        create index if not exists user_portfolio on portfolio (user_id)
     """)

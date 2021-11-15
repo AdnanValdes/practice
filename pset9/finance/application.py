@@ -74,6 +74,7 @@ def buy():
         if (cash_available - symbol['price']) <= 0:
             return apology("you don't have enough cash for that!", 403)
 
+        # Create transaction
         db.execute("""
             insert into transactions
                 (user_id, timestamp, symbol, operation, shares, price)
@@ -85,6 +86,21 @@ def buy():
              price=symbol['price'],
              user_id=session['user_id']
         )
+
+        # Add to portfolio
+        db.execute("""
+            insert into portfolio
+                (user_id, symbol, shares)
+                values
+                    (:user_id, :symbol, :shares)
+            """,
+            user_id = session['user_id'],
+            symbol=symbol['symbol'],
+            shares=shares
+        )
+
+
+        return redirect("/")
 
     return render_template("buy.html")
 
