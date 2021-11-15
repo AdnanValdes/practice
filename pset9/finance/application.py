@@ -116,7 +116,7 @@ def quote():
     """Get stock quote."""
 
     if request.method == "POST":
-        ticker = request.form.get("ticker")
+        ticker = request.form.get("symbol")
         price = lookup(ticker)
         return render_template("quote.html", price=price)
     return render_template("quote.html")
@@ -130,7 +130,7 @@ def register():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        confirm = request.form.get("confirm")
+        confirm = request.form.get("confirmation")
 
         # Check that username and password fields are submitted
         if not username or not password or not confirm:
