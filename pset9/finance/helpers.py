@@ -62,3 +62,49 @@ def lookup(symbol):
 def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"
+
+def enforce_tables(database):
+    """Ensure all required tables are present in database"""
+    
+    database.execute("""
+    create table if not exists users (
+        id integer,
+        username text not null,
+        hash text not null,
+        cash numeric not null default 10000.00,
+        primary key(id)
+        )
+    """)
+
+    database.execute("""
+    create table if not exists transactions (
+        user_id integer,
+        timestamp text not null,
+        symbol text not null,
+        operation text not null,
+        shares integer not null,
+        price real not null,
+        foreign key(user_id) references users(id)
+        )
+    """)
+
+    database.execute("""
+    create table if not exists portfolio (
+        user_id integer,
+        symbol text,
+        shares integer,
+        foreign key(user_id) references users(id)
+        )
+    """)
+
+    database.execute("""
+        create unique index if not exists username on users (username)
+    """)
+
+    database.execute("""
+        create index if not exists user_id on transactions (user_id)
+    """)
+
+    database.execute("""
+        create index if not exists user_id on portfolio (user_id)
+    """)

@@ -10,7 +10,7 @@
 
 		<p>A share of {{ price.name }} ({{ price.symbol}}) costs {{price.price | usd}}</p>
 		<form action="/quote" method="post">
-			<div class=mb-auto>
+			<div class="mb-auto">
 					<input autocomplete="off" class="form-control m-auto" name="symbol" placeholder="Search another ticker" type="text">
 				</div>
 				<button class="btn btn-primary mt-2" type="submit">Quote</button>

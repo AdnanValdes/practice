@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, enforce_tables, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
@@ -37,6 +37,9 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///finance.db")
 
+# Make sure all tables exist at start up
+enforce_tables(db)
+
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
@@ -53,7 +56,39 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = lookup(request.form.get("symbol"))
+        shares = request.form.get("shares")
+
+        # Check that symbol and shares are not empty
+        if not symbol:
+            return apology("must select a valid ticker!", 403)
+
+        if not shares:
+            return apology("must select number of shares!", 403)
+
+        # Confirm user has enough cash for transaction
+        cash_available = db.execute("select cash from users where id = ?", session['user_id'])
+        cash_available = cash_available[0]['cash']
+        print(cash_available, type(cash_available))
+        if (cash_available - symbol['price']) <= 0:
+            return apology("you don't have enough cash for that!", 403)
+
+        db.execute("""
+            insert into transactions
+                (timestamp, symbol, operation, shares, price)
+                values
+                    (datetime('now'), :symbol, :operation, :shares, :price)
+                where user_id = :user_id
+            """,
+             symbol=symbol['symbol'],
+             operation="buy",
+             shares=shares,
+             price=symbol['price'],
+             user_id=session['user_id']
+        )
+
+    return render_template("buy.html")
 
 
 @app.route("/history")
@@ -114,7 +149,7 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-
+    print(session)
     if request.method == "POST":
         ticker = request.form.get("symbol")
         price = lookup(ticker)
@@ -134,15 +169,15 @@ def register():
 
         # Check that username and password fields are submitted
         if not username or not password or not confirm:
-            return apology("Invalid username or password", 400)
+            return apology("Invalid username or password", 403)
 
         # Check that password confirmation matches
         if password != confirm:
-            return apology("Passwords do not match", 400)
+            return apology("Passwords do not match", 403)
 
         # Check that username is not already in database
         if len(db.execute("select username from users where username = ?", username)) == 1:
-            return apology("Username taken", 400)
+            return apology("Username taken", 403)
 
         # Insert user into database
         db.execute("insert into users (username, hash) values (:username, :hash )", username=username, hash=generate_password_hash(password))
