@@ -114,7 +114,12 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+
+    if request.method == "POST":
+        ticker = request.form.get("ticker")
+        price = lookup(ticker)
+        return render_template("quote.html", price=price)
+    return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -143,8 +148,8 @@ def register():
         db.execute("insert into users (username, hash) values (:username, :hash )", username=username, hash=generate_password_hash(password))
 
         # Login the user and direct to index
-        rows = db.execute("select id from users where username = ?", username)
-        session["user_id"] = rows[0]["id"]
+        user_id = db.execute("select id from users where username = ?", username)
+        session["user_id"] = user_id[0]["id"]
 
         return redirect("/")
 
