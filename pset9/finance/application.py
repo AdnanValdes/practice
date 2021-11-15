@@ -76,11 +76,9 @@ def buy():
 
         db.execute("""
             insert into transactions
-                (timestamp, symbol, operation, shares, price)
+                (user_id, timestamp, symbol, operation, shares, price)
                 values
-                    (datetime('now'), :symbol, :operation, :shares, :price)
-                where user_id = :user_id
-            """,
+                    (:user_id, datetime('now'), :symbol, :operation, :shares, :price)""",
              symbol=symbol['symbol'],
              operation="buy",
              shares=shares,
