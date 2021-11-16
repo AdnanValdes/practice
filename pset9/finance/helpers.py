@@ -93,7 +93,8 @@ def enforce_tables(database):
         user_id integer,
         symbol text,
         shares integer,
-        foreign key(user_id) references users(id)
+        foreign key(user_id) references users(id),
+        unique (user_id, symbol)
         )
     """)
 

@@ -90,12 +90,15 @@ def buy():
         )
 
         # Add to portfolio
-        # Needs to account for shares of the same stock
+        # Uses SQLite3 "UPSERT"
+        # https://www.sqlite.org/draft/lang_UPSERT.html
         db.execute("""
             insert into portfolio
                 (user_id, symbol, shares)
                 values
                     (:user_id, :symbol, :shares)
+                on conflict (user_id, symbol)
+                    do update set shares=shares+:shares
             """,
             user_id = session['user_id'],
             symbol=symbol['symbol'],
