@@ -16,15 +16,21 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for stock in portfolio %}
+			{% for item in portfolio %}
 				<tr>
-					<td class="text-start">{{ stock.symbol }}</td>
-					<td class="text-start">Gamestop Corporation - Class A</td>
-					<td class="text-end">{{ stock.shares }}</td>
-					<td class="text-end">$202.10</td>
-					<td class="text-end">$2,021.00</td>
+					<td class="text-start">{{ item.symbol }}</td>
+					<td class="text-start">{{ item.name }}</td>
+					<td class="text-end">{{ item.shares }}</td>
+					<td class="text-end">{{ item.price | usd}}</td>
+					<td class="text-end">{{ item.total | usd}}</td>
 				</tr>
 			{% endfor %}
 		</tbody>
+		<tfoot>
+			<tr>
+				<td class="text-end fw-bold" colspan=4>Cash</td>
+				<td class="text-end">{{ cash | usd }}</td>
+			</tr>
+		</tfoot>
 	</table>
 {% endblock %}

@@ -49,9 +49,24 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    data = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
+    portfolio = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
 
-    return render_template("index.html", portfolio=data)
+    cash = db.execute("select cash from users where id = :user_id", user_id=session['user_id'])[0]['cash']
+    print(cash)
+    _portfolio = []
+    for stock in portfolio:
+        stock_data = lookup(stock['symbol'])
+
+        data = {"symbol": stock_data['symbol'],
+                        "name": stock_data["name"],
+                        "shares":stock["shares"],
+                        "price": stock_data["price"],
+                        "total": stock_data["price"] * stock["shares"]
+        }
+
+        _portfolio.append(data)
+
+    return render_template("index.html", portfolio=_portfolio, cash=cash)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -72,7 +87,7 @@ def buy():
         # Confirm user has enough cash for transaction
         cash_available = db.execute("select cash from users where id = ?", session['user_id'])[0]['cash']
 
-        if (cash_available - (symbol['price'] * shares)) < 0:
+        if (cash_available - (symbol['price'] * int(shares))) < 0:
             return apology("you don't have enough cash for that!", 403)
 
         # Create transaction
