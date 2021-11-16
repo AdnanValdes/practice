@@ -167,7 +167,7 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    print(session)
+
     if request.method == "POST":
         ticker = request.form.get("symbol")
         price = lookup(ticker)
