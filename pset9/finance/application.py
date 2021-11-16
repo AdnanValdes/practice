@@ -70,10 +70,9 @@ def buy():
             return apology("must select number of shares!", 403)
 
         # Confirm user has enough cash for transaction
-        cash_available = db.execute("select cash from users where id = ?", session['user_id'])
-        cash_available = cash_available[0]['cash']
-        print(cash_available, type(cash_available))
-        if (cash_available - symbol['price']) <= 0:
+        cash_available = db.execute("select cash from users where id = ?", session['user_id'])[0]['cash']
+
+        if (cash_available - (symbol['price'] * shares)) < 0:
             return apology("you don't have enough cash for that!", 403)
 
         # Create transaction
