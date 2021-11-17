@@ -95,6 +95,7 @@ def buy():
         create_transaction(db, "buy", symbol, shares)
         buy_stock(db, cash_available, symbol, shares)
 
+        flash(f"Bought {shares} of {symbol}")
         return redirect("/")
 
     return render_template("buy.html")
@@ -140,6 +141,7 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # Redirect user to home page
+        flash(f"Logged in as {request.form.get('username')}")
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -155,6 +157,7 @@ def logout():
     session.clear()
 
     # Redirect user to login form
+    flash("Successfully logged out!")
     return redirect("/")
 
 
@@ -204,6 +207,7 @@ def register():
         user_id = db.execute("select id from users where username = ?", username)
         session["user_id"] = user_id[0]["id"]
 
+        flash("Successfully registered!")
         return redirect("/")
 
     return render_template("register.html")
@@ -241,6 +245,7 @@ def sell():
         create_transaction(db, "sell", symbol, shares)
         sell_stock(db, symbol, shares)
 
+        flash(f"Sold {shares} of {symbol}")
         return redirect("/")
 
     # Show sell landing page for GET arrivals
@@ -283,6 +288,7 @@ def change_password():
         hash=generate_password_hash(new_password),
         user_id=session['user_id'])
 
+        flash("Password changed!")
         return redirect("/")
 
     return render_template("password.html")

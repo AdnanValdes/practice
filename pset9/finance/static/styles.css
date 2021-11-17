@@ -22,6 +22,11 @@ nav .navbar-brand .green
     color: #2e944b;
 }
 
+nav .navbar-brand .white
+{
+    color: whitesmoke
+}
+
 main .form-control
 {
     /* Center form controls */
@@ -44,4 +49,9 @@ main img
 {
     /* Constrain images on small screens */
     max-width: 100%;
+}
+
+body .dark
+{
+    background-color: #181520;
 }
