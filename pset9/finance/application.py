@@ -81,16 +81,16 @@ def buy():
 
         # Check that symbol and shares are not empty
         if not symbol:
-            return apology("must select a valid ticker!", 403)
+            return apology("must select a valid ticker!", 400)
 
         if not shares or not shares.isdigit() or int(shares) < 1:
-            return apology("must select number of shares!", 403)
+            return apology("must select number of shares!", 400)
 
         # Confirm user has enough cash for transaction
         cash_available = db.execute("select cash from users where id = ?", session['user_id'])[0]['cash'] - (symbol['price'] * int(shares))
 
         if cash_available < 0:
-            return apology("you don't have enough cash for that!", 403)
+            return apology("you don't have enough cash for that!", 400)
 
         create_transaction(db, "buy", symbol, shares)
         buy_stock(db, cash_available, symbol, shares)
@@ -166,6 +166,10 @@ def quote():
     if request.method == "POST":
         ticker = request.form.get("symbol")
         price = lookup(ticker)
+
+        if price == None or not ticker:
+            return apology("invalid symbol", 400)
+
         return render_template("quote.html", price=price)
 
     return render_template("quote.html")
@@ -183,15 +187,15 @@ def register():
 
         # Check that username and password fields are submitted
         if not username or not password or not confirm:
-            return apology("Invalid username or password", 403)
+            return apology("Invalid username or password", 400)
 
         # Check that password confirmation matches
         if password != confirm:
-            return apology("Passwords do not match", 403)
+            return apology("Passwords do not match", 400)
 
         # Check that username is not already in database
         if len(db.execute("select username from users where username = ?", username)) == 1:
-            return apology("Username taken", 403)
+            return apology("Username taken", 400)
 
         # Insert user into database
         db.execute("insert into users (username, hash) values (:username, :hash )", username=username, hash=generate_password_hash(password))
