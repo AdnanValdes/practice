@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<table class="table table-striped text-light">
+	<thead class="thead-dark">
+		<tr>
+			<th class="test-left">Symbol</th>
+			<th class="test-left">Operation</th>
+			<th class="text-right">Shares</th>
+			<th class="text-right">Price</th>
+			<th class="text-right">Transacted</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for item in transactions %}
+			<tr>
+				<td class="test-left">{{ item.symbol }}</td>
+				<td class="test-left">{{ item.operation }}</td>
+				<td class="text-right">{{ item.shares }}</td>
+				<td class="text-right">{{ item.price | usd}}</td>
+				<td class="text-right">{{ item.timestamp}}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

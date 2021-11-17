@@ -126,8 +126,12 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    """Show history of transactions"""
-    return apology("TODO")
+    transactions = db.execute("""
+        select symbol, operation, shares, price, timestamp from transactions
+            where user_id = :user_id order by timestamp desc
+    """,
+    user_id=session['user_id'])
+    return render_template("history.html", transactions=transactions)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -232,13 +236,11 @@ def sell():
         symbol = request.form.get('symbol')
         shares = request.form.get('shares')
 
-
         if not symbol:
             return apology("Select a valid symbol", 403)
 
         if not shares:
             return apology("Select valid number of stock to sell", 403)
-
 
         # Check that the user has stock
         # Placed here to run query only if basic form validation succeeds
@@ -278,6 +280,7 @@ def sell():
         user_id=session['user_id'],
         symbol=symbol['symbol'])
 
+        # If user owns 0 stock, remove from stock from table
         db.execute("""
             delete from portfolio
                 where user_id = :user_id
