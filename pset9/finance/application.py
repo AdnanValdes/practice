@@ -7,7 +7,8 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, create_transaction, enforce_tables, login_required, lookup, usd
+from helpers import apology, login_required, lookup, usd
+from sql_helpers import buy_stock, create_transaction, enforce_tables, sell_stock
 
 # Configure application
 app = Flask(__name__)
@@ -49,14 +50,14 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    portfolio = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
+    _portfolio = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
 
     cash = db.execute("select cash from users where id = :user_id", user_id=session['user_id'])[0]['cash']
 
 
-    _portfolio = []
+    portfolio = []
     total = cash
-    for stock in portfolio:
+    for stock in _portfolio:
         stock_data = lookup(stock['symbol'])
 
         data = {"symbol": stock_data['symbol'],
@@ -65,9 +66,9 @@ def index():
                         "price": stock_data["price"],
                         "total": stock_data["price"] * stock["shares"]
         }
-        _portfolio.append(data)
+        portfolio.append(data)
         total += data['total']
-    return render_template("index.html", portfolio=_portfolio, cash=cash, total=total)
+    return render_template("index.html", portfolio=portfolio, cash=cash, total=total)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -86,37 +87,13 @@ def buy():
             return apology("must select number of shares!", 403)
 
         # Confirm user has enough cash for transaction
-        cash_available = db.execute("select cash from users where id = ?", session['user_id'])[0]['cash']
+        cash_available = db.execute("select cash from users where id = ?", session['user_id'])[0]['cash'] - (symbol['price'] * int(shares))
 
-        if (cash_available - (symbol['price'] * int(shares))) < 0:
+        if cash_available < 0:
             return apology("you don't have enough cash for that!", 403)
 
         create_transaction(db, "buy", symbol, shares)
-
-        db.execute("""
-            update users
-                set cash = :cash
-                where id = :user_id
-        """,
-        cash =(cash_available - (symbol['price'] * int(shares))),
-        user_id=session['user_id']
-        )
-
-        # Add to portfolio
-        # Uses SQLite3 "UPSERT"
-        # https://www.sqlite.org/draft/lang_UPSERT.html
-        db.execute("""
-            insert into portfolio
-                (user_id, symbol, shares)
-                values
-                    (:user_id, :symbol, :shares)
-                on conflict (user_id, symbol)
-                    do update set shares=shares+:shares
-            """,
-            user_id = session['user_id'],
-            symbol=symbol['symbol'],
-            shares=shares
-        )
+        buy_stock(db, cash_available, symbol, shares)
 
         return redirect("/")
 
@@ -190,6 +167,7 @@ def quote():
         ticker = request.form.get("symbol")
         price = lookup(ticker)
         return render_template("quote.html", price=price)
+
     return render_template("quote.html")
 
 
@@ -255,43 +233,13 @@ def sell():
         if not user_stock:
             return apology(f"You don't have any {symbol} stock available", 403)
 
-
         symbol = lookup(symbol)
         create_transaction(db, "sell", symbol, shares)
-
-        # Add cash to user's account
-        db.execute("""
-            update users
-                set cash = cash + :cash
-                where id = :user_id
-        """,
-        cash =(symbol['price'] * int(shares)),
-        user_id=session['user_id']
-        )
-
-        # Remove stock from user's portfolio
-        db.execute("""
-            update portfolio
-                set shares = shares - :shares
-                where user_id = :user_id
-                and symbol = :symbol
-        """,
-        shares=shares,
-        user_id=session['user_id'],
-        symbol=symbol['symbol'])
-
-        # If user owns 0 stock, remove from stock from table
-        db.execute("""
-            delete from portfolio
-                where user_id = :user_id
-                and symbol = :symbol
-                and shares = 0
-        """,
-        user_id=session['user_id'],
-        symbol=symbol['symbol'])
+        sell_stock(db, symbol, shares)
 
         return redirect("/")
 
+    # Show sell landing page for GET arrivals
     portfolio = db.execute("""
         select symbol from portfolio
             where user_id = :user_id
