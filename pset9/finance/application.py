@@ -278,6 +278,15 @@ def sell():
         user_id=session['user_id'],
         symbol=symbol['symbol'])
 
+        db.execute("""
+            delete from portfolio
+                where user_id = :user_id
+                and symbol = :symbol
+                and shares = 0
+        """,
+        user_id=session['user_id'],
+        symbol=symbol['symbol'])
+
         return redirect("/")
 
     portfolio = db.execute("""
