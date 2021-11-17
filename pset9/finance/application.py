@@ -234,8 +234,8 @@ def sell():
         user_id=session['user_id'],
         symbol=symbol)
 
-        if not user_stock:
-            return apology(f"You don't have any {symbol} stock available", 400)
+        if not user_stock or user_stock[0]['shares'] < int(shares):
+            return apology(f"You don't have enough {symbol} stock available", 400)
 
         symbol = lookup(symbol)
         create_transaction(db, "sell", symbol, shares)
@@ -252,6 +252,40 @@ def sell():
     )
     return render_template("sell.html", portfolio=portfolio)
 
+@app.route("/password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    """ Allow user to change password"""
+    if request.method == "POST":
+        username = request.form.get("username")
+        old_password = request.form.get("password")
+        new_password = request.form.get("new_password")
+        confirmation = request.form.get("confirmation")
+
+        if not (username or old_password or new_password or confirmation):
+            return apology("you must fill all values", 400)
+
+        if new_password != confirmation:
+            return apology("new passwords do not match", 400)
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], old_password):
+            return apology("invalid username and/or password", 403)
+
+        db.execute("""
+            update users
+                set hash = :hash
+                where id = :user_id
+        """,
+        hash=generate_password_hash(new_password),
+        user_id=session['user_id'])
+
+        return redirect("/")
+
+    return render_template("password.html")
 
 def errorhandler(e):
     """Handle error"""
