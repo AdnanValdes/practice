@@ -219,10 +219,10 @@ def sell():
         shares = request.form.get('shares')
 
         if not symbol:
-            return apology("Select a valid symbol", 403)
+            return apology("Select a valid symbol", 400)
 
         if not shares:
-            return apology("Select valid number of stock to sell", 403)
+            return apology("Select valid number of stock to sell", 400)
 
         # Check that the user has stock
         # Placed here to run query only if basic form validation succeeds
@@ -235,7 +235,7 @@ def sell():
         symbol=symbol)
 
         if not user_stock:
-            return apology(f"You don't have any {symbol} stock available", 403)
+            return apology(f"You don't have any {symbol} stock available", 400)
 
         symbol = lookup(symbol)
         create_transaction(db, "sell", symbol, shares)
