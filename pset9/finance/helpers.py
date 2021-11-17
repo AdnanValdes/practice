@@ -63,6 +63,20 @@ def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"
 
+
+def create_transaction(db, operation, symbol, shares):
+    db.execute("""
+    insert into transactions
+        (user_id, timestamp, symbol, operation, shares, price)
+        values
+            (:user_id, datetime('now'), :symbol, :operation, :shares, :price)""",
+     symbol=symbol['symbol'],
+     operation=operation,
+     shares=shares,
+     price=symbol['price'],
+     user_id=session['user_id']
+)
+
 def enforce_tables(database):
     """Ensure all required tables are present in database"""
 

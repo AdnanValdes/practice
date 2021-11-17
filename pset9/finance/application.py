@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, enforce_tables, login_required, lookup, usd
+from helpers import apology, create_transaction, enforce_tables, login_required, lookup, usd
 
 # Configure application
 app = Flask(__name__)
@@ -91,18 +91,7 @@ def buy():
         if (cash_available - (symbol['price'] * int(shares))) < 0:
             return apology("you don't have enough cash for that!", 403)
 
-        # Create transaction
-        db.execute("""
-            insert into transactions
-                (user_id, timestamp, symbol, operation, shares, price)
-                values
-                    (:user_id, datetime('now'), :symbol, :operation, :shares, :price)""",
-             symbol=symbol['symbol'],
-             operation="buy",
-             shares=shares,
-             price=symbol['price'],
-             user_id=session['user_id']
-        )
+        create_transaction(db, "buy", symbol, shares)
 
         db.execute("""
             update users
@@ -238,7 +227,66 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+
+    if request.method == "POST":
+        symbol = request.form.get('symbol')
+        shares = request.form.get('shares')
+
+
+        if not symbol:
+            return apology("Select a valid symbol", 403)
+
+        if not shares:
+            return apology("Select valid number of stock to sell", 403)
+
+
+        # Check that the user has stock
+        # Placed here to run query only if basic form validation succeeds
+        user_stock = db.execute("""
+            select shares from portfolio
+                where user_id = :user_id
+                and symbol = :symbol
+        """,
+        user_id=session['user_id'],
+        symbol=symbol)
+
+        if not user_stock:
+            return apology(f"You don't have any {symbol} stock available", 403)
+
+
+        symbol = lookup(symbol)
+        create_transaction(db, "sell", symbol, shares)
+
+        # Add cash to user's account
+        db.execute("""
+            update users
+                set cash = cash + :cash
+                where id = :user_id
+        """,
+        cash =(symbol['price'] * int(shares)),
+        user_id=session['user_id']
+        )
+
+        # Remove stock from user's portfolio
+        db.execute("""
+            update portfolio
+                set shares = shares - :shares
+                where user_id = :user_id
+                and symbol = :symbol
+        """,
+        shares=shares,
+        user_id=session['user_id'],
+        symbol=symbol['symbol'])
+
+        return redirect("/")
+
+    portfolio = db.execute("""
+        select symbol from portfolio
+            where user_id = :user_id
+            """,
+            user_id=session['user_id']
+    )
+    return render_template("sell.html", portfolio=portfolio)
 
 
 def errorhandler(e):

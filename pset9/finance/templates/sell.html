@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block main %}
+	{% if portfolio %}
+	<form action="/sell" method="post">
+		<div class="mb-3">
+			<select class="form-control m-auto" name="symbol">
+				<option disabled selected>Symbol</option>
+				{% for stock in portfolio %}
+					<option value="{{ stock.symbol }}">{{ stock.symbol }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="mb-3">
+			<input autocomplete="off" class="form-control m-auto" name="shares" min="0" placeholder="Shares" type="number" required>
+		</div>
+		<button class="btn btn-primary mt-1" type="submit">Sell</button>
+	</form>
+	{% else %}
+	<div class="mb-3">
+		<p>You don't own any stocks!</p>
+		<a href="/buy">
+			<button class="btn btn-primary mt-1">Buy stock!</button>
+		</a>
+	</div>
+	{% endif %}
+
+{% endblock %}
