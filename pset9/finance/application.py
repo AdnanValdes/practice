@@ -81,7 +81,7 @@ def buy():
         if not symbol:
             return apology("must select a valid ticker!", 403)
 
-        if not shares:
+        if not shares or not shares.isdigit() or int(shares) < 1:
             return apology("must select number of shares!", 403)
 
         # Confirm user has enough cash for transaction
@@ -101,6 +101,15 @@ def buy():
              shares=shares,
              price=symbol['price'],
              user_id=session['user_id']
+        )
+
+        db.execute("""
+            update users
+                set cash = :cash
+                where id = :user_id
+        """,
+        cash =(cash_available - (symbol['price'] * int(shares))),
+        user_id=session['user_id']
         )
 
         # Add to portfolio
