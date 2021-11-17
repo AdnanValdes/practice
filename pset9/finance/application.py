@@ -52,8 +52,10 @@ def index():
     portfolio = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
 
     cash = db.execute("select cash from users where id = :user_id", user_id=session['user_id'])[0]['cash']
-    print(cash)
+
+
     _portfolio = []
+    total = cash
     for stock in portfolio:
         stock_data = lookup(stock['symbol'])
 
@@ -63,10 +65,9 @@ def index():
                         "price": stock_data["price"],
                         "total": stock_data["price"] * stock["shares"]
         }
-
         _portfolio.append(data)
-
-    return render_template("index.html", portfolio=_portfolio, cash=cash)
+        total += data['total']
+    return render_template("index.html", portfolio=_portfolio, cash=cash, total=total)
 
 
 @app.route("/buy", methods=["GET", "POST"])

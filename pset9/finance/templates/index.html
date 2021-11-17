@@ -8,29 +8,33 @@
 	<table class="table table-striped text-light">
 		<thead class="thead-dark">
 			<tr>
-				<th class="text-start">Symbol</th>
-				<th class="text-start">Name</th>
-				<th class="text-end">Shares</th>
-				<th class="text-end">Price</th>
-				<th class="text-end">TOTAL</th>
+				<th class="test-left">Symbol</th>
+				<th class="test-left">Name</th>
+				<th class="text-right">Shares</th>
+				<th class="text-right">Price</th>
+				<th class="text-right">TOTAL</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for item in portfolio %}
 				<tr>
-					<td class="text-start">{{ item.symbol }}</td>
-					<td class="text-start">{{ item.name }}</td>
-					<td class="text-end">{{ item.shares }}</td>
-					<td class="text-end">{{ item.price | usd}}</td>
-					<td class="text-end">{{ item.total | usd}}</td>
+					<td class="test-left">{{ item.symbol }}</td>
+					<td class="test-left">{{ item.name }}</td>
+					<td class="text-right">{{ item.shares }}</td>
+					<td class="text-right">{{ item.price | usd}}</td>
+					<td class="text-right">{{ item.total | usd}}</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 		<tfoot>
 			<tr>
-				<td class="text-end fw-bold" colspan=4>Cash</td>
-				<td class="text-end">{{ cash | usd }}</td>
+				<td class="text-right font-weight-bold" colspan=4>Cash</td>
+				<td class="text-right">{{ cash | usd }}</td>
 			</tr>
+            <tr>
+                <td class="border-0 font-weight-bold text-right" colspan="4">TOTAL</td>
+                <td class="border-0 text-right">{{ total | usd}}</td>
+            </tr>
 		</tfoot>
 	</table>
 {% endblock %}
