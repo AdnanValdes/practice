@@ -24,7 +24,10 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
                 average = (average + *(&image[i][j].rgbtBlue + k));
             }
 
-            average = round(average / 3);
+            // Need to divide by float here because all RGB values are ints
+            // Any division by another int will return an int
+            // This leads to truncated values
+            average = round(average / 3.0);
             for (int k=0; k < count; k++)
             {
                 *(&image[i][j].rgbtBlue + k) = average;
@@ -63,6 +66,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width])
             {
                 sepiaGreen = 255;
             }
+
             if (sepiaBlue > 255)
             {
                 sepiaBlue = 255;
@@ -95,5 +99,53 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
+    // Box blur: computer value of each pixel by taking the average for all values within a column and row of the pixel
+
+    // Create a copy of the image
+    RGBTRIPLE tmp[height][width];
+    RGBTRIPLE colors;
+
+    for (int i=0; i < height; i++)
+    {
+        for (int j=0; j<width;j++)
+        {
+            tmp[i][j] = image[i][j];
+        }
+    }
+
+    // Iterate over rows and columns to get each pixel
+    for (int i=0; i<height; i++)
+    {
+        for (int j=0; j < width; j++)
+        {
+            colors.rgbtBlue = 0;
+            colors.rgbtGreen = 0;
+            colors.rgbtRed = 0;
+
+            int totalPixels = 0;
+
+            // Pretend we can only look at a smaller array of -1 to +1 from current pixel
+            for (int k=-1; k < 2; k++)
+            {
+                for (int l=-1; l < 2; l++)
+                {
+                    // Check for corners and edges
+                    int horizontal = i + k;
+                    int vertical = j + l;
+                    if ((horizontal >= 0 && horizontal < height) && (vertical >=0 && vertical < width))
+                    {
+                        colors.rgbtRed += tmp[horizontal][vertical].rgbtRed;
+                        colors.rgbtBlue += tmp[horizontal][vertical].rgbtBlue;
+                        colors.rgbtGreen += tmp[horizontal][vertical].rgbtGreen;
+                        totalPixels++;
+                    }
+                }
+            }
+
+            image[i][j].rgbtGreen = round(colors.rgbtGreen / totalPixels);
+            image[i][j].rgbtBlue = round(colors.rgbtBlue / totalPixels);
+            image[i][j].rgbtRed = round(colors.rgbtRed / totalPixels);
+        }
+    }
     return;
 }
