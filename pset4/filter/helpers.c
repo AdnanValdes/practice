@@ -118,6 +118,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j=0; j < width; j++)
         {
+            // Need to use ints, not the RGBTRIPLE struct because it stores values as BYTES
             int Blue = 0;
             int Green = 0;
             int Red = 0;
