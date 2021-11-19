@@ -118,11 +118,11 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
     {
         for (int j=0; j < width; j++)
         {
-            colors.rgbtBlue = 0;
-            colors.rgbtGreen = 0;
-            colors.rgbtRed = 0;
+            int Blue = 0;
+            int Green = 0;
+            int Red = 0;
 
-            int totalPixels = 0;
+            float totalPixels = 0.0;
 
             // Pretend we can only look at a smaller array of -1 to +1 from current pixel
             for (int k=-1; k < 2; k++)
@@ -132,19 +132,20 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                     // Check for corners and edges
                     int horizontal = i + k;
                     int vertical = j + l;
+
                     if ((horizontal >= 0 && horizontal < height) && (vertical >=0 && vertical < width))
                     {
-                        colors.rgbtRed += tmp[horizontal][vertical].rgbtRed;
-                        colors.rgbtBlue += tmp[horizontal][vertical].rgbtBlue;
-                        colors.rgbtGreen += tmp[horizontal][vertical].rgbtGreen;
+                        Red += tmp[horizontal][vertical].rgbtRed;
+                        Blue += tmp[horizontal][vertical].rgbtBlue;
+                        Green += tmp[horizontal][vertical].rgbtGreen;
                         totalPixels++;
                     }
                 }
             }
 
-            image[i][j].rgbtGreen = round(colors.rgbtGreen / totalPixels);
-            image[i][j].rgbtBlue = round(colors.rgbtBlue / totalPixels);
-            image[i][j].rgbtRed = round(colors.rgbtRed / totalPixels);
+            image[i][j].rgbtGreen = round(Green / totalPixels);
+            image[i][j].rgbtBlue = round(Blue / totalPixels);
+            image[i][j].rgbtRed = round(Red / totalPixels);
         }
     }
     return;
