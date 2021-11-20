@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
 	if (file != NULL)
 	{
 		BYTE buffer[JPEGBLOCK];
-		FILE *img = NULL;
-		char filename[8];
+		FILE *img;
+		char *filename = malloc(sizeof("###.jpg"));
 		int counter = 0;
 
 		// On success, fread() and fwrite() return the number of items read or written. This number equals the number of bytes transferred only when size is 1
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 			// Check if first 4 bytes are JPEG headers
 			if (is_jpeg(buffer))
 			{
-				if (counter == 0)
+				if (counter != 0)
 				{
 					fclose(img);
 				}
@@ -39,10 +39,21 @@ int main(int argc, char *argv[])
 				img = fopen(filename, "w");
 				counter++;
 			}
+			if (counter != 0)
+			{
+				fwrite(&buffer, JPEGBLOCK, 1, img);
+			}
 		}
 		fclose(img);
 		fclose(file);
+		free(filename);
 	}
+	else
+	{
+		printf("Could not read file\n");
+		return 1;
+	}
+	return 0;
 }
 
 bool is_jpeg(BYTE buffer[JPEGBLOCK])
@@ -53,4 +64,3 @@ bool is_jpeg(BYTE buffer[JPEGBLOCK])
 	}
 	return false;
 }
-
