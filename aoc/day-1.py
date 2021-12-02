@@ -10,7 +10,7 @@ def main():
 	with open(data) as f:
 		data = [int(i) for i in f.readlines()]
 	print(countDepthIncrease(data))
-
+	print(countWindowDepthIncrease(data))
 
 def countDepthIncrease(sonarData):
 
@@ -21,6 +21,20 @@ def countDepthIncrease(sonarData):
 
 		if sonarData[i] > sonarData[i -1]:
 			count +=1
+	return count
+
+def countWindowDepthIncrease(sonarData):
+
+	count = 0
+	previous = 0
+	for i in range(len(sonarData)):
+		if i < 2:
+			continue
+
+		current = sum(sonarData[i-3:i])
+		if current > previous:
+			count += 1
+		previous = current
 	return count
 
 
