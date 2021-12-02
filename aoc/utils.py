@@ -10,4 +10,4 @@ def get_input(day, part):
 	data = requests.get(url, cookies=cookies)
 	with open(f"d{day}p{part}_input.txt", mode="wb") as localfile:
 		localfile.write(data.content)
-	return data.content
+	return f"d{day}p{part}_input.txt"

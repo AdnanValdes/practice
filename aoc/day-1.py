@@ -2,7 +2,7 @@ from utils import get_input
 
 def main():
 	data = get_input(1, 1)
-	with open(f"d1p1_input.txt") as f:
+	with open(data) as f:
 		data = [int(i) for i in f.readlines()]
 	print(countDepthIncrease(data))
 
