@@ -1,7 +1,12 @@
 from utils import get_input
+from sys import argv
 
 def main():
-	data = get_input(1, 1)
+	if len(argv) != 3:
+		print("Usage: python3 ./script day part")
+		return 1
+
+	data = get_input(argv[1], argv[2])
 	with open(data) as f:
 		data = [int(i) for i in f.readlines()]
 	print(countDepthIncrease(data))
