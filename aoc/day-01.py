@@ -1,19 +1,15 @@
 from utils import get_input
-from sys import argv
+from sys import argv, exit
 
 def main():
-	if len(argv) != 3:
-		print("Usage: python3 ./script day part")
-		return 1
-
 	data = get_input(argv[1], argv[2])
+
 	with open(data) as f:
 		data = [int(i) for i in f.readlines()]
 	print(countDepthIncrease(data))
 	print(countWindowDepthIncrease(data))
 
 def countDepthIncrease(sonarData):
-
 	count = 0
 	for i in range(len(sonarData)):
 		if i == 0:
@@ -24,7 +20,6 @@ def countDepthIncrease(sonarData):
 	return count
 
 def countWindowDepthIncrease(sonarData):
-
 	count = 0
 	previous = 0
 	for i in range(len(sonarData)):
@@ -32,6 +27,8 @@ def countWindowDepthIncrease(sonarData):
 			continue
 
 		current = sum(sonarData[i-3:i])
+		test = sonarData[i-2] + sonarData[i-1] + sonarData[i]
+		print("TEST:", current, test)
 		if current > previous:
 			count += 1
 		previous = current
@@ -39,4 +36,8 @@ def countWindowDepthIncrease(sonarData):
 
 
 if __name__ == "__main__":
+	if len(argv) != 3:
+		print("Usage: python3 ./script day part")
+		exit()
+
 	main()
