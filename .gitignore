@@ -1,3 +1,5 @@
+*.rkt~*
+
 *.db
 *flask*
 
