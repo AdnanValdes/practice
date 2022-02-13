@@ -2,6 +2,7 @@
 *.rkt#*
 *.db
 *flask*
+*~*
 
 <Right># Byte-compiled / optimized / DLL files
 __pycache__/
