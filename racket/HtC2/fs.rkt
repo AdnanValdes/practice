@@ -2,7 +2,7 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname fs) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
-
+(require test-engine/racket-tests)
 ;; fs-starter.rkt (type comments and examples)
 
 ;; Data definitions:
@@ -92,3 +92,53 @@
         [else
          (append (list-names--element (first loe))
                (list-names--loe (rest loe)))]))
+
+
+;; Backtracking searching
+
+; PROBLEM
+; Design a function that consumes String and Element and looks for a data element with the given 
+; name. If it finds that element it produces the data, otherwise it produces false.
+
+;; String Element -> Integer or false
+;; String ListOfElement -> Integer or false???
+;; search the given tree for an element with the given name, produce data if found; false otherwise
+(check-expect (find--loe "F3" empty) false)
+(check-expect (find--element "F3" F1) false)
+(check-expect (find--element "F3" F3) 3)
+(check-expect (find--element "F3" D4) false)
+(check-expect (find--element "F1" D4) 1)
+(check-expect (find--element "F2" D4) 2)
+(check-expect (find--element "D4" D4) 0)
+(check-expect (find--element "F3" D6) 3)
+(check-expect (find--loe "F2" (cons F1 (cons F2 empty))) 2)
+(check-expect (find--loe "F3" (cons F1 (cons F2 empty))) false)
+
+; (define (find--element n e) false)
+; (define (find--loe n loe)   false)
+
+
+(define (find--element n e)
+  (if (string=? (elt-name e) n) 
+        (elt-data e)                 ;Integer
+        (find--loe n (elt-subs e))))  ;ListOfElement
+
+(define (find--loe n loe)
+  (cond [(empty? loe) false]
+        [else
+         (if (not (false? (find--element n (first loe)))) ;is it found in (first loe?)
+                (find--element n (first loe))
+              (find--loe n (rest loe)))]))
+
+; PROBLEM
+; Design a function that consumes Element and produces a rendering of the tree. For example: 
+
+; HINTS:
+;   - This function is not very different than the first two functions above.
+;   - Keep it simple! Start with a not very fancy rendering like the one above.
+;     Once that works you can make it more elaborate if you want to.
+;   - And... be sure to USE the recipe. Not just follow it, but let it help you.
+;     For example, work out a number of examples BEFORE you try to code the function. 
+
+
+(test)
