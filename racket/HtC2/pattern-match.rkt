@@ -55,6 +55,20 @@
 
 ;; Pattern ListOf1String -> Boolean
 ;; interp. produce true if pattern is found in string - only matching from start, false otherwise.
+;;                                     lst1S
+;;                           empty           (cons String LOS)
+;;
+;; P   empty                              TRUE
+;; t                         --------------------------------
+;; r   (cons "A" Pattern)                  | and (first pattern) (1string) is
+;;										   | alphabetical then recurse
+;; n                             FALSE     |
+;;                                         ------------------
+;;     (cons "N" Pattern)                  | and (first pattern) (1string) is
+;;										   | numerical then recurse
+;;                                         |
+
+
 (check-expect (match? empty empty) true)
 (check-expect (match? (list "A") empty) false)
 (check-expect (match? (list "N") empty) false)
