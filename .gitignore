@@ -3,6 +3,7 @@
 *.db
 *flask*
 *~*
+*.bak*
 
 <Right># Byte-compiled / optimized / DLL files
 __pycache__/
