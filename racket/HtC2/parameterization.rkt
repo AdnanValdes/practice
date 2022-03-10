@@ -101,7 +101,7 @@
 
 ;(define (negative-only lon) empty) ;stub
 
-;; fn ListOfNumber -> ListOfNumber
+;; (X -> Boolean) (listof X) -> (listof X)
 ;; given fn and (list n0 n1 ...) produce list where each in (list (fn n0) (fn n1) ...) is true
 (check-expect (filter2 negative? empty) empty)
 (check-expect (filter2 negative? (list 1 -2 3 -4)) (list -2 -4))
@@ -113,7 +113,38 @@
 (define (filter2 fn lon)
   (cond [(empty? lon) empty]
         [else
-         (if (fn (first lon))
+         (if (fn (first lon))     ;; fn must produce bool, since it's part of (if ...
              (cons (first lon)
                    (filter2 fn (rest lon)))
              (filter2 fn (rest lon)))]))
+
+
+
+;; ListOfNumber -> Boolean
+;; produce true if every number in lon is positive
+(check-expect (all-positive? empty) true)
+(check-expect (all-positive? (list 1 -2 3)) false)
+(check-expect (all-positive? (list 1 2 3)) true)
+
+(define (all-positive? lon) (andmap2 positive? lon))
+
+;; ListOfNumber -> Boolean
+;; produce true if every number in lon is negative
+(check-expect (all-negative? empty) true)
+(check-expect (all-negative? (list 1 -2 3)) false)
+(check-expect (all-negative? (list -1 -2 -3)) true)
+
+(define (all-negative? lon) (andmap2 negative? lon))
+
+;; (X -> Boolean) (listof X -> Boolean
+;;produce true if pred produces true for every element of the list
+(check-expect (andmap2 positive? empty) true)
+(check-expect (andmap2 positive? (list 1 -2 3)) false)
+(check-expect (andmap2 positive? (list 1 2 3)) true)
+(check-expect (andmap2 negative? (list -1 -2 -3)) true)
+
+(define (andmap2 pred lst)
+  (cond [(empty? lst) true]
+        [else 
+         (and (pred (first lst))
+              (andmap2 pred (rest lst)))]))
