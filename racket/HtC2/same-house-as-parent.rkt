@@ -72,7 +72,7 @@
 (check-expect (same-house-as-parent We) empty)
 (check-expect (same-house-as-parent Wh) empty)
 (check-expect (same-house-as-parent Wg) (list "A"))
-(check-expect (same-house-as-parent Wk) (list "E" "F" "A"))
+(check-expect (same-house-as-parent Wk) (list "A" "F" "E"))
 
 ;template from Wizard plus lost context accumulator
 #;
@@ -103,7 +103,6 @@
 
 ;; =========================================================================
 ;PROBLEM:
-;
 ;Design a new function definition for same-house-as-parent that is tail 
 ;recursive. You will need a worklist accumulator.
 ;; =========================================================================
@@ -111,19 +110,35 @@
 ; template from Wizard, plus worklist accumulator
 ; the worklist needs to include the parent for each wizard in the worklist
 ; instead of just adding wizards, we must add (wizard, parent house)
+; added compound data definition for work list entries
 
 
-(define (fn-for-wizard w)
-  (local [(define (fn-for-wizard w)
-            (... (wizard-name w)
-                 (wizard-house w)
-                 (fn-for-low (wizard-children w))))
-          (define (fn-for-low low)
-            (cond [(empty? low) (...)]
+(define (same-house-as-parent w)
+  ;; todo is (listof ...) ; a worklist accumulator
+  ;; rsf is (listof String) ; a result so far accumulator
+  (local [(define-struct wle (w ph))
+          ;; WLE (worklist entry) is (make-wle Wizard String)
+          ;; interp. a worklist entry with the wizard to pass to fn-for-wz,
+          ;;         and that wizard's parent's house
+
+          (define (fn-for-wizard w ph todo rsf)
+            ;(... rsf (wizard-name w)
+            ;     (wizard-house w)
+            (fn-for-low (append (map (lambda (k)
+                                       (make-wle k (wizard-house w)))
+                                     (wizard-children w))
+                                todo)
+                        (if (string=? (wizard-house w) ph)
+                            (cons (wizard-name w) rsf)
+                            rsf)))
+          (define (fn-for-low todo rsf)
+            (cond [(empty? todo) rsf]
                   [else
-                   (... (fn-for-wizard (first low))
-                        (fn-for-low (rest low)))]))]
-    (fn-for-wizard w)))
+                   (fn-for-wizard (wle-w (first todo))
+                                  (wle-ph (first todo))
+                                  (rest todo)
+                                  rsf)]))]
+    (fn-for-wizard w "" empty empty)))
 
 ;; =========================================================================
 ;PROBLEM:
@@ -175,7 +190,7 @@
           (define (fn-for-low todo acc)
             (cond [(empty? todo) acc]
                   [else
-                      (fn-for-wizard (first todo) (rest todo) acc)]))]
+                   (fn-for-wizard (first todo) (rest todo) acc)]))]
     (fn-for-wizard w empty 0)))
 
 
