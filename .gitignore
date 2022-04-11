@@ -1,3 +1,5 @@
+resources/
+#*
 *.rkt~*
 *.rkt#*
 *.db
