@@ -40,23 +40,57 @@ fun pow (x : int, y : int ) =
     else x * pow(x,y-1)
 
 fun cube(x : int) =
-  pow(x,3)
+    pow(x,3)
 
 val onetwentyfive = cube 5
 
 (* pairs and tuples *)
 fun swap (pr : int*bool) = 
-  (#2 pr, #1 pr)
+    (#2 pr, #1 pr)
 
 (* (int * int) * (int * int) -> int *)
 fun sum_two_parts (pr1 : int * int, pr2 : int * int) = 
-  (#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)
+    (#1 pr1) + (#2 pr1) + (#1 pr2) + (#2 pr2)
 
 (* int * int -> (int * int) *)
 fun div_mod (x : int, y : int) = 
-  (x div y, x mod y)
+    (x div y, x mod y)
 
 fun sort_pair(pr : int * int) = 
-  if (#1 pr) < (#2 pr)
-  then pr
-  else (#2 pr, #1 pr)
+    if (#1 pr) < (#2 pr)
+    then pr
+    else (#2 pr, #1 pr)
+
+fun sum_list (xs : int list) = 
+    if null xs
+    then 0
+    else (hd xs) + sum_list(tl xs)
+
+fun list_product (xs : int list) = 
+    if null xs
+    then 1
+    else hd xs * list_product(tl xs)
+
+(* int -> int list *)
+(* consumes a number n and produces list [n, n-1,... n-n] *)
+fun countdown (x : int) = 
+    if x=0
+    then []
+    else x :: countdown(x-1)
+
+fun append (xs : int list, ys : int list) = 
+    if null xs
+    then ys
+    else (hd xs) :: append ((tl xs), ys)
+
+(* functions over pairs of lists *)
+fun sum_pair_list (xs : (int * int) list) =
+    if null xs
+    then 0
+    else #1 (hd xs) + #2 (hd xs) + sum_pair_list(tl xs)
+
+(* consumes a list of pairs and returns a list with the first element of each pair *)
+fun firsts (xs : (int * int) list) =
+    if null xs then []
+    else #1 (hd xs) :: (firsts (tl xs))
+
