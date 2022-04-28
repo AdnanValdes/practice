@@ -13,38 +13,22 @@ fun is_older (dt1 : int* int* int, dt2 : int * int * int) =
 (* consumes a list of dates and a month (i.e., an int) and returns how many 
 * dates in the list are in the given month *)
 
-fun number_in_month (lod0 : (int * int * int) list, month : int) =
-    let
-        fun fn_for_lod (lod : (int * int * int) list, acc : int) = 
-            if null lod 
-            then acc
-            else
-                if (#2 (hd lod)) = month
-                then fn_for_lod ((tl lod), (1 + acc))
-                else fn_for_lod ((tl lod), acc)
-    in
-        fn_for_lod(lod0, 0)
-    end
+fun number_in_month (lod : (int * int * int) list, month : int) =
+    if null lod then 0
+    else
+        if (#2 (hd lod)) = month
+        then number_in_month(tl lod, month) + 1
+        else number_in_month(tl lod, month)
 
 (* (int * int * int) list, int list -> int *)
 (* consumes a list of dates and a list of months (e.g an int list) and returns
 * the number of dates in the list of dates that are in any of the months in the
 * list of months *)
 
-fun number_in_months (lod : (int * int * int) list, lom0 : int list) = 
-    if null lod orelse null lom0 then 0
-    else
-        let 
-            fun fn_for_lom (lom : int list) = 
-                if null lom 
-                then 0
-                else
-                    number_in_month (lod, (hd lom)) + number_in_months (lod, (tl
-                    lom))
-        in
-            fn_for_lom (lom0)
-    end
-                    
+fun number_in_months (lod : (int * int * int) list, lom : int list) = 
+    if null lom orelse null lod then 0
+    else number_in_month(lod, hd lom) + number_in_months (lod, tl lom)
+
 (* (int * int * int) list, int -> (int * int * int) list *)
 (* consumes a list of dates and a month and returns a filtered list of dates
 * containing only those that are in the month *)
