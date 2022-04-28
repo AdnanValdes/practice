@@ -5,11 +5,9 @@
 (* Two equal dates produces false *)
 
 fun is_older (dt1 : int* int* int, dt2 : int * int * int) =
-    if #1 dt1 < #1 dt2 then true
-    else if #2 dt1 < #2 dt2 andalso #1 dt1 = #1 dt2 then true
-    else if #3 dt1 < #3 dt2 andalso #2 dt1 = #2 dt2 andalso #1 dt1 = #1 dt1 then true
-    else false
-    
+    #1 dt1 < #1 dt2 orelse
+    (#2 dt1 < #2 dt2 andalso #1 dt1 = #1 dt2) orelse
+    (#3 dt1 < #3 dt1 andalso #2 dt1 = #2 dt1 andalso #1 dt1 = #1 dt1)
 
 (* (int * int * int) list, int -> int *)
 (* consumes a list of dates and a month (i.e., an int) and returns how many 
