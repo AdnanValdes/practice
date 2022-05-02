@@ -151,6 +151,23 @@ fun max2 (xs : int list) =
 (* records and compound types *)
 val x1 = {first=(1+2, true andalso true), second=3+4, third=(false, 9)}
 
+(* datatypes *)
+datatype testtype = TwoInts of int * int
+                    | Str of string
+                    | Pizza
+
+val a_datatype = Str "hi"
+val b_datatype = Str
+val c_datatype = Pizza
+val d_datatype = TwoInts(1+2,3+4)
+val e_datatype = a_datatype
+
+(* f has type testtype -> int *)
+fun f x_type = 
+    case x_type of
+         Pizza => 3
+        |Str s => 8
+        |TwoInts(i1,i2) => i1+i2
 
 
 
