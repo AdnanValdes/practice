@@ -148,7 +148,8 @@ fun max2 (xs : int list) =
         SOME (max_nonempty xs)
     end
 
-
+(* records and compound types *)
+val x1 = {first=(1+2, true andalso true), second=3+4, third=(false, 9)}
 
 
 
