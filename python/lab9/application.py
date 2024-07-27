@@ -12,19 +12,25 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///birthdays.db")
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
         # TODO: Add the user's entry into the database
         if "delete" in request.form:
-            db.execute('delete from birthdays where id = ?', request.form.get('delete'))
+            db.execute("delete from birthdays where id = ?", request.form.get("delete"))
 
-        elif 'name' in request.form:
-            name = request.form.get('name').capitalize()
-            birthday = request.form.get('birthday')
+        elif "name" in request.form:
+            name = request.form.get("name").capitalize()
+            birthday = request.form.get("birthday")
             month = birthday[5:7]
             day = birthday[-2:]
-            db.execute("insert into birthdays (name, month, day) values (:name, :month, :day)", name=name, month=month, day=day)
+            db.execute(
+                "insert into birthdays (name, month, day) values (:name, :month, :day)",
+                name=name,
+                month=month,
+                day=day,
+            )
         return redirect("/")
 
     else:

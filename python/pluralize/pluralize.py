@@ -2,12 +2,14 @@ import pytest
 
 # Design a function that pluralizes a given word by adding "s"
 
+
 # String -> String
 # Append "s" to given string
-def pluralize(s:str) -> str:
+def pluralize(s: str) -> str:
     if type(s) != str:
         raise Exception("Input must be of type str!")
     return s + "s"
+
 
 def test_pluralize():
     assert pluralize("cat") == "cats"

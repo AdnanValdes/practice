@@ -17,12 +17,13 @@ def main():
 
     # Calculate pennies to give the customer
     pennies = calculate_pennies(cents)
-    cents= cents - pennies * 1
+    cents = cents - pennies * 1
 
     # Sum coins
     coins = quarters + dimes + nickels + pennies
 
     print(int(coins))
+
 
 def get_cents():
 
@@ -36,21 +37,26 @@ def get_cents():
     cents = dollars * 100
     return cents
 
+
 def calculate_quarters(cents):
     quarters = cents / 25
     return int(quarters)
+
 
 def calculate_dimes(cents):
     dimes = cents / 10
     return int(dimes)
 
+
 def calculate_nickels(cents):
     nickels = cents / 5
     return int(nickels)
 
+
 def calculate_pennies(cents):
     pennies = cents / 1
     return int(pennies)
+
 
 if __name__ == "__main__":
     main()

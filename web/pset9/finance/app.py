@@ -50,24 +50,29 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    _portfolio = db.execute("select symbol, shares from portfolio where user_id = :user_id", user_id=session['user_id'])
+    _portfolio = db.execute(
+        "select symbol, shares from portfolio where user_id = :user_id",
+        user_id=session["user_id"],
+    )
 
-    cash = db.execute("select cash from users where id = :user_id", user_id=session['user_id'])[0]['cash']
-
+    cash = db.execute(
+        "select cash from users where id = :user_id", user_id=session["user_id"]
+    )[0]["cash"]
 
     portfolio = []
     total = cash
     for stock in _portfolio:
-        stock_data = lookup(stock['symbol'])
+        stock_data = lookup(stock["symbol"])
 
-        data = {"symbol": stock_data['symbol'],
-                        "name": stock_data["name"],
-                        "shares":stock["shares"],
-                        "price": stock_data["price"],
-                        "total": stock_data["price"] * stock["shares"]
+        data = {
+            "symbol": stock_data["symbol"],
+            "name": stock_data["name"],
+            "shares": stock["shares"],
+            "price": stock_data["price"],
+            "total": stock_data["price"] * stock["shares"],
         }
         portfolio.append(data)
-        total += data['total']
+        total += data["total"]
     return render_template("index.html", portfolio=portfolio, cash=cash, total=total)
 
 
@@ -87,7 +92,9 @@ def buy():
             return apology("must select number of shares!", 400)
 
         # Confirm user has enough cash for transaction
-        cash_available = db.execute("select cash from users where id = ?", session['user_id'])[0]['cash'] - (symbol['price'] * int(shares))
+        cash_available = db.execute(
+            "select cash from users where id = ?", session["user_id"]
+        )[0]["cash"] - (symbol["price"] * int(shares))
 
         if cash_available < 0:
             return apology("you don't have enough cash for that!", 400)
@@ -104,11 +111,13 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    transactions = db.execute("""
+    transactions = db.execute(
+        """
         select symbol, operation, shares, price, timestamp from transactions
             where user_id = :user_id order by timestamp desc
     """,
-    user_id=session['user_id'])
+        user_id=session["user_id"],
+    )
     return render_template("history.html", transactions=transactions)
 
 
@@ -131,10 +140,14 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
+        )
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(
+            rows[0]["hash"], request.form.get("password")
+        ):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -197,11 +210,18 @@ def register():
             return apology("Passwords do not match", 400)
 
         # Check that username is not already in database
-        if len(db.execute("select username from users where username = ?", username)) == 1:
+        if (
+            len(db.execute("select username from users where username = ?", username))
+            == 1
+        ):
             return apology("Username taken", 400)
 
         # Insert user into database
-        db.execute("insert into users (username, hash) values (:username, :hash )", username=username, hash=generate_password_hash(password))
+        db.execute(
+            "insert into users (username, hash) values (:username, :hash )",
+            username=username,
+            hash=generate_password_hash(password),
+        )
 
         # Login the user and direct to index
         user_id = db.execute("select id from users where username = ?", username)
@@ -219,8 +239,8 @@ def sell():
     """Sell shares of stock"""
 
     if request.method == "POST":
-        symbol = request.form.get('symbol')
-        shares = request.form.get('shares')
+        symbol = request.form.get("symbol")
+        shares = request.form.get("shares")
 
         if not symbol:
             return apology("Select a valid symbol", 400)
@@ -230,15 +250,17 @@ def sell():
 
         # Check that the user has stock
         # Placed here to run query only if basic form validation succeeds
-        user_stock = db.execute("""
+        user_stock = db.execute(
+            """
             select shares from portfolio
                 where user_id = :user_id
                 and symbol = :symbol
         """,
-        user_id=session['user_id'],
-        symbol=symbol)
+            user_id=session["user_id"],
+            symbol=symbol,
+        )
 
-        if not user_stock or user_stock[0]['shares'] < int(shares):
+        if not user_stock or user_stock[0]["shares"] < int(shares):
             return apology(f"You don't have enough {symbol} stock available", 400)
 
         symbol = lookup(symbol)
@@ -249,18 +271,20 @@ def sell():
         return redirect("/")
 
     # Show sell landing page for GET arrivals
-    portfolio = db.execute("""
+    portfolio = db.execute(
+        """
         select symbol from portfolio
             where user_id = :user_id
             """,
-            user_id=session['user_id']
+        user_id=session["user_id"],
     )
     return render_template("sell.html", portfolio=portfolio)
+
 
 @app.route("/password", methods=["GET", "POST"])
 @login_required
 def change_password():
-    """ Allow user to change password"""
+    """Allow user to change password"""
     if request.method == "POST":
         username = request.form.get("username")
         old_password = request.form.get("password")
@@ -274,24 +298,29 @@ def change_password():
             return apology("new passwords do not match", 400)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", request.form.get("username")
+        )
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], old_password):
             return apology("invalid username and/or password", 403)
 
-        db.execute("""
+        db.execute(
+            """
             update users
                 set hash = :hash
                 where id = :user_id
         """,
-        hash=generate_password_hash(new_password),
-        user_id=session['user_id'])
+            hash=generate_password_hash(new_password),
+            user_id=session["user_id"],
+        )
 
         flash("Password changed!")
         return redirect("/")
 
     return render_template("password.html")
+
 
 def errorhandler(e):
     """Handle error"""
