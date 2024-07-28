@@ -6,6 +6,10 @@ resources/
 *flask*
 *~*
 *.bak*
+*.zip
+*.png
+*.jpeg
+*.jpg
 
 <Right># Byte-compiled / optimized / DLL files
 __pycache__/
