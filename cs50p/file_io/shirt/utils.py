@@ -5,7 +5,7 @@ def main():
     pass
 
 
-def count_args(count):
+def count_args(count: int) -> bool:
     len_argv = len(sys.argv) - 1
     if len_argv < count:
         sys.exit("Too few command-line arguments")
