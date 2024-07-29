@@ -14,3 +14,4 @@ def test_wrong_validate():
     assert validate("256.0.0.0") == False
     assert validate("1111.1.1.1") == False
     assert validate("300.1.1.1") == False
+    assert validate("cat") == False
