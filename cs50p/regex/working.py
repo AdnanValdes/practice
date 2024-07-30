@@ -24,10 +24,12 @@ def convert(s):
 
 def manage(hrs, mins, meridian):
     if mins == None:
-        mins = 00
+        mins = 0
     hrs, mins = int(hrs), int(mins)
+
     if hrs > 12 or mins >= 60:
         raise ValueError
+
     if meridian == "AM":
         return f"{hrs:02}:{mins:02}"
     else:
