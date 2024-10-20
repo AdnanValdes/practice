@@ -1,0 +1,56 @@
+@import url("static/bmt.woff");
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+    font-size: 26px;
+    font-family: "Berkeley Mono Trial", monospace;
+}
+
+body {
+    margin: 1.5rem;
+    background-color: #2f2f2f;
+    color: #e1e1e1;
+    text-align: center;
+}
+
+nav {
+    border: 1px solid rgb(245, 245, 245);
+    border-radius:  1rem;
+    margin: 0 auto 1rem;
+    max-width: 50rem;
+    padding: .5rem;
+}
+
+nav ul li {
+    list-style-type: none;
+    padding: 5px;
+}
+
+nav li a {
+    color: rgb(245, 245, 245, 0.85);
+}
+
+h1 {
+    margin: 1rem;
+}
+
+h2 {
+    padding: 0.5rem;
+}
+
+a {
+    color:aliceblue;
+}
+
+a:visited {
+    color: lightgray;
+}
+
+a:hover, a:active {
+    color: #eee
+}

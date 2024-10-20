@@ -1,0 +1,59 @@
+@import url(bmt.woff);
+
+html {
+    font-size: 18px;
+    font-family: 'Berkeley Mono Trial';
+}
+
+body {
+    background-color: #333;
+    color: whitesmoke;
+}
+
+body {
+    min-height: 100vh;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    border-left: 1px solid whitesmoke;
+    border-right: 1px solid whitesmoke;
+}
+
+a {
+    color:aliceblue;
+}
+
+a:visited {
+    color: lightgray;
+}
+
+a:hover, a:active {
+    color: #eee
+}
+
+table, tr, th, td, caption {
+    border: 1px solid #eee;
+    border-collapse: collapse;
+    padding: 0.5rem;
+    margin: auto;
+}
+
+h1 {
+    margin: auto;
+    text-align: center;
+}
+
+.footer {
+    margin: auto;
+    text-align: center;
+}
+
+li {
+    list-style-type:decimal-leading-zero;
+    list-style-position: inside;
+}
+
+ul ::marker {
+    color:red;
+    content: "Balanced>> "
+}

@@ -25,7 +25,7 @@ def make_request(num: float) -> None:
         bitcoin_value = r.json()["bpi"]["USD"]["rate_float"]
     except KeyError:
         sys.exit("Something went wrong, try again.")
-    print(f"{num * bitcoin_value:,.4f}")
+    print(f"${num * bitcoin_value:,.4f}", end="")
 
 
 if __name__ == "__main__":

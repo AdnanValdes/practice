@@ -1,0 +1,11 @@
+html {
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+    background: #ffefd5;
+    color: darkblue
+}
+
+p {
+    color: #333
+}

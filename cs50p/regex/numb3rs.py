@@ -4,8 +4,8 @@ import sys
 IPV4 = (
     r"^(25[0-5]?|2[0-4]\d|1\d\d|\d\d|\d)"  # Match first octet
     r"(\.(25[0-5]?|2[0-4]\d|1\d\d|\d\d|\d)){2}"  # Match middle octet twice with leading period (.)
-    r"\.(25[0-5]?|2[0-4]\d|1\d\d|\d\d|\d)$"
-)  # Match last octet
+    r"\.(25[0-5]?|2[0-4]\d|1\d\d|\d\d|\d)$" # Match last octet
+)
 
 
 def main():

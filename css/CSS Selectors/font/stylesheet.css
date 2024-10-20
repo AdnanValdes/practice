@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Berkeley Mono Trial';
+    src: url('hinted-BerkeleyMonoTrial-Regular.woff') format('woff'),
+        url('hinted-BerkeleyMonoTrial-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

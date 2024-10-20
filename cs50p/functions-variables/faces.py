@@ -5,7 +5,7 @@ def main():
 
 
 def convert(text):
-    return text.replace(":)", "::))").replace(":(", "::((")
+    return text.replace(":)", "🙂").replace(":(", "🙁")
 
 
 main()

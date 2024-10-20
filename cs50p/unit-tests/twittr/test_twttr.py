@@ -1,11 +1,13 @@
 import pytest
-from twittr import is_vowel, shorten
+from twttr import is_vowel, shorten
 
 
-def test_is_vowel():
-    assert is_vowel("a") == True
-    assert is_vowel("A") == True
-    assert is_vowel("n") == False
+
+def test_upper_consonant():
+    assert shorten("B") == "B"
+
+def test_punctuation():
+    assert shorten(".") == "."
 
 
 def test_shorten_vowels():

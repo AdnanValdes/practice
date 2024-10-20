@@ -1,0 +1,29 @@
+@import url(font/hinted-BerkeleyMonoTrial-Regular.woff);
+
+html {
+    font-size: 22px;
+    background-color: #1f1e1e;
+}
+
+body {
+    font-family: 'Berkeley Mono Trial';
+}
+
+h1, h2 {
+    color: blue;
+}
+
+p span {
+    color: brown;
+    text-transform: uppercase;
+    background-color: gold;
+}
+
+.gray {
+    color: gray;
+}
+
+#second {
+    font-style: italic;
+}
+

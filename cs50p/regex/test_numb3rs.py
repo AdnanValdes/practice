@@ -1,6 +1,7 @@
 import pytest
 from numb3rs import validate
 
+# PROGRAM EXPECTS FOUR OCTET IPv4 ADDRESSES
 
 def test_correct_validate():
     assert validate("1.1.1.1") == True
@@ -18,3 +19,4 @@ def test_wrong_validate():
     assert validate("300.1.1.1") == False
     assert validate("cat") == False
     assert validate("123.125.123.643") == False
+    assert validate("1.1") == False

@@ -22,6 +22,7 @@ def main():
     if args_len < 2:
         prompt()
     elif args_len == 3 and valid_args():
+        print(sys.argv[2])
         prompt(font=sys.argv[2])
     else:
         sys.exit("Invalid usage")

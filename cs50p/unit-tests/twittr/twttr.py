@@ -16,7 +16,8 @@ def is_vowel(s):
     return True if s in VOWELS or s.lower() in VOWELS else False
 
 
-def shorten(text: str) -> str:
+def shorten(text) -> str:
+    text = str(text)
     o = ""
     for i in text:
         if is_vowel(i):
