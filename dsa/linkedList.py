@@ -19,13 +19,13 @@ class LinkedList:
             return
         # Create something to interate over, starts assign to current HEAD
         itr = self.head
-        llstr = ""  # A string to append each value we find
+        #llstr = ""  # A string to append each value we find
 
         while itr:
-            llstr += str(itr.data) + "-->"
+            print(str(itr.data), "-->", sep="", end="")
             itr = itr.next
 
-        print(llstr)
+        print("")
 
     def insert_at_begining(self, data):
         """
